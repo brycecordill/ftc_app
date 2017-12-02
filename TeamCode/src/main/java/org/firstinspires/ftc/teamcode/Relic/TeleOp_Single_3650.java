@@ -1,14 +1,13 @@
 package org.firstinspires.ftc.teamcode.Relic;
 
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 
-@TeleOp(name = "Operation Telly Relic", group = "3650 Prod")
-public class TeleOp_3650 extends OpMode{
+@TeleOp(name = "TeleOp Single Relic", group = "3650 Prod")
+public class TeleOp_Single_3650 extends OpMode {
     private DcMotor lDrive, rDrive, lift1;
     private Servo armServo, grabber;
 
@@ -35,16 +34,16 @@ public class TeleOp_3650 extends OpMode{
     @Override
     public void loop() {
 
-        if (gamepad2.a){
+        if (gamepad1.x){  // reset lift encoder
             lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             lift1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
 
-        if(gamepad1.a){
+        if(gamepad1.a){  // back?
             lDrive.setPower(.6);
             rDrive.setPower(.6);
         }
-        else if (gamepad1.y){
+        else if (gamepad1.y){ // forward?
             lDrive.setPower(-.6);
             rDrive.setPower(-.6);
         }
@@ -58,10 +57,10 @@ public class TeleOp_3650 extends OpMode{
         }
 
         // lift
-        if (gamepad2.right_trigger > 0.1 && lift1.getCurrentPosition() < 31004){
+        if (gamepad1.right_trigger > 0.1 && lift1.getCurrentPosition() < 31004){
             lift1.setPower(gamepad2.right_trigger);
         }
-        else if (gamepad2.left_trigger > 0.1 && lift1.getCurrentPosition() >= 0){
+        else if (gamepad1.left_trigger > 0.1 && lift1.getCurrentPosition() >= 0){
             lift1.setPower(-gamepad2.left_trigger);
         }
 
@@ -78,11 +77,11 @@ public class TeleOp_3650 extends OpMode{
         }
 
         // Grabber servo (Need to test values!)
-        if (gamepad2.dpad_left){
+        if (gamepad1.dpad_left){
             // close
             grabber.setPosition(0.2);
         }
-        else if (gamepad2.dpad_right){
+        else if (gamepad1.dpad_right){
             // open
             grabber.setPosition(0.8);
         }
