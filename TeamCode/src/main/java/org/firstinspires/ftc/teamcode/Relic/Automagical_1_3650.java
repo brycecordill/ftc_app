@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
  * Created by Bryce on 9/11/2017.
  */
 
-@Autonomous(name="Automagical 1", group ="3650")
+@Autonomous(name="Automagical 1", group ="3650 Testing")
 public class Automagical_1_3650 extends LinearOpMode {
 
     private VuforiaLocalizer vuforia;

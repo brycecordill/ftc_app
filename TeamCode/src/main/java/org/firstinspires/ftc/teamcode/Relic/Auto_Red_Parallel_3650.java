@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 
-@Autonomous(name = "Auto Red Parallel", group = "3650 Testing")
+@Autonomous(name = "Auto Red Parallel", group = "3650 Prod")
 public class Auto_Red_Parallel_3650 extends LinearOpMode{
     private VuforiaLocalizer vuforia;
     private PrivateData priv = new PrivateData();
@@ -116,9 +116,7 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
         setBothEncoder(2000);
         setBothPower(0.6);
 
-        while (lDrive.isBusy()){
-            idle();
-        }
+        while (lDrive.isBusy()){ idle(); }
         setBothPower(0.0);
         Thread.sleep(400);
 
@@ -128,9 +126,7 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
 
 
 
-        while (lDrive.isBusy()){
-            idle();
-        }
+        while (lDrive.isBusy()){ idle(); }
 
         setBothPower(0.0);
         Thread.sleep(500);
@@ -145,28 +141,22 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
                 telemetry.addData("Key: ", vuMark);
                 telemetry.update();
                 if (vuMark == RelicRecoveryVuMark.RIGHT) {
-                    setBothEncoder(800);  // Change with correct vals
+                    setBothEncoder(800);
                     setBothPower(.5);
                     turn = false;
-                    while (lDrive.isBusy()){
-                        idle();
-                    }
+                    while (lDrive.isBusy()){ idle(); }
                     break;
                 }
                 else if (vuMark == RelicRecoveryVuMark.CENTER) {
-                    setBothEncoder(1500);  // Change with correct vals
+                    setBothEncoder(1500);
                     setBothPower(.5);
-                    while (lDrive.isBusy()){
-                        idle();
-                    }
+                    while (lDrive.isBusy()){ idle(); }
                     break;
                 }
                 else if (vuMark == RelicRecoveryVuMark.LEFT) {
-                    setBothEncoder(2200); // Change with correct vals
+                    setBothEncoder(2200);
                     setBothPower(.5);
-                    while (lDrive.isBusy()){
-                        idle();
-                    }
+                    while (lDrive.isBusy()){ idle(); }
                     break;
                 }
 
@@ -177,45 +167,6 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
             }
             telemetry.update();
         }
-
-        /*
-        while(opModeIsActive()){
-
-
-            if (vuMark == RelicRecoveryVuMark.RIGHT) {
-                telemetry.addData("Key: ", vuMark);
-                setBothEncoder(300);  // Change with correct vals
-                setBothPower(.5);
-                while (lDrive.isBusy()){
-                    idle();
-                }
-                break;
-            }
-            else if (vuMark == RelicRecoveryVuMark.CENTER) {
-                telemetry.addData("Key: ", vuMark);
-                setBothEncoder(400);  // Change with correct vals
-                setBothPower(.5);
-                while (lDrive.isBusy()){
-                    idle();
-                }
-                break;
-            }
-            else if (vuMark == RelicRecoveryVuMark.LEFT) {
-                telemetry.addData("Key: ", vuMark);
-                setBothEncoder(500); // Change with correct vals
-                setBothPower(.5);
-                while (lDrive.isBusy()){
-                    idle();
-                }
-                break;
-            }
-
-            else{
-                telemetry.addData("No key detected!", null);
-                idle();
-            }
-            telemetry.update();
-        }*/
 
 
         relicTrackables.deactivate(); // End Vuforia search
@@ -224,9 +175,7 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
 
         turn2Angle(-90, imu);
 
-        while (lDrive.isBusy()){
-            idle();
-        }
+        while (lDrive.isBusy()){ idle(); }
 
         lift1.setTargetPosition(1000);
         lift1.setPower(.99);
@@ -241,30 +190,28 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
         grabber.setPosition(0.5);
         Thread.sleep(1200);
 
+        setBothEncoder(-400);
+        setBothPower(.3);
+
+        lift1.setTargetPosition(0);
+        lift1.setPower(.5);
+        while (lDrive.isBusy() || lift1.isBusy()){ idle(); }
 
 
         if (turn) {
-            setBothEncoder(-600);
-            setBothPower(.3);
 
-            lift1.setTargetPosition(0);
-            lift1.setPower(.5);
-            while (lDrive.isBusy() || lift1.isBusy()){
-                idle();
-            }
+            setBothEncoder(-200);
+            setBothPower(.3);
+            while (lDrive.isBusy()) { idle(); }
 
             grabber.setPosition(0.8);
             Thread.sleep(700);
             grabber.setPosition(0.5);
             turn2Angle(-30, imu);
-            while (lDrive.isBusy() || lift1.isBusy()) {
-                idle();
-            }
+            while (lDrive.isBusy() || lift1.isBusy()) { idle(); }
             setBothEncoder(200);
             setBothPower(.3);
-            while (lDrive.isBusy() || lift1.isBusy()) {
-                idle();
-            }
+            while (lDrive.isBusy() || lift1.isBusy()) { idle(); }
         }
     }
 
@@ -299,6 +246,28 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
         setBothPower(0.0);
     }
 
+
+    // Get heading for IMU
+    double getHeading(IMU_class a){
+        return a.getAngles()[0];
+    }
+
+    void setBothPower(double power){
+        lDrive.setPower(power);
+        rDrive.setPower(power);
+    }
+    void setBothEncoder(int encValue){
+        lDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        lDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        lDrive.setTargetPosition(encValue);
+        rDrive.setTargetPosition(encValue);
+    }
+
+
     //Don't use, it breaks things
     void turnToAngle(double target, IMU_class a){
         lDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -329,25 +298,5 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
         lDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-    }
-
-    // Get heading for IMU
-    double getHeading(IMU_class a){
-        return a.getAngles()[0];
-    }
-
-    void setBothPower(double power){
-        lDrive.setPower(power);
-        rDrive.setPower(power);
-    }
-    void setBothEncoder(int encValue){
-        lDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        lDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        lDrive.setTargetPosition(encValue);
-        rDrive.setTargetPosition(encValue);
     }
 }
