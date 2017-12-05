@@ -138,14 +138,16 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
         relicTrackables.activate(); // Start Vuforia object search
         Thread.sleep(1000);
 
+        boolean turn = true;
         while(opModeIsActive()){
             RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
             if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
                 telemetry.addData("Key: ", vuMark);
                 telemetry.update();
                 if (vuMark == RelicRecoveryVuMark.RIGHT) {
-                    setBothEncoder(600);  // Change with correct vals
+                    setBothEncoder(800);  // Change with correct vals
                     setBothPower(.5);
+                    turn = false;
                     while (lDrive.isBusy()){
                         idle();
                     }
@@ -230,7 +232,7 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
         lift1.setPower(.99);
         Thread.sleep(500);
 
-        setBothEncoder(600);
+        setBothEncoder(550);
         setBothPower(.3);
         Thread.sleep(1000);
 
@@ -239,21 +241,30 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
         grabber.setPosition(0.5);
         Thread.sleep(1200);
 
-        setBothEncoder(-800);
-        setBothPower(.3);
 
-        lift1.setTargetPosition(0);
-        lift1.setPower(.5);
 
-        while (lDrive.isBusy() || lift1.isBusy()){
-            idle();
-        }
-        grabber.setPosition(0.8);
-        Thread.sleep(700);
-        grabber.setPosition(0.5);
-        turn2Angle(-30, imu);
-        while (lDrive.isBusy() || lift1.isBusy()){
-            idle();
+        if (turn) {
+            setBothEncoder(-600);
+            setBothPower(.3);
+
+            lift1.setTargetPosition(0);
+            lift1.setPower(.5);
+            while (lDrive.isBusy() || lift1.isBusy()){
+                idle();
+            }
+
+            grabber.setPosition(0.8);
+            Thread.sleep(700);
+            grabber.setPosition(0.5);
+            turn2Angle(-30, imu);
+            while (lDrive.isBusy() || lift1.isBusy()) {
+                idle();
+            }
+            setBothEncoder(200);
+            setBothPower(.3);
+            while (lDrive.isBusy() || lift1.isBusy()) {
+                idle();
+            }
         }
     }
 

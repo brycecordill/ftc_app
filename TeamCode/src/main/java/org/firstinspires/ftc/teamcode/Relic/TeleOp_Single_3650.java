@@ -57,11 +57,11 @@ public class TeleOp_Single_3650 extends OpMode {
         }
 
         // lift
-        if (gamepad1.right_trigger > 0.1 && lift1.getCurrentPosition() < 31004){
-            lift1.setPower(gamepad2.right_trigger);
+        if (gamepad1.right_trigger > 0.1){ //&& lift1.getCurrentPosition() < 31004){
+            lift1.setPower(gamepad1.right_trigger);
         }
-        else if (gamepad1.left_trigger > 0.1 && lift1.getCurrentPosition() >= 0){
-            lift1.setPower(-gamepad2.left_trigger);
+        else if (gamepad1.left_trigger > 0.1){ //&& lift1.getCurrentPosition() >= 0){
+            lift1.setPower(-gamepad1.left_trigger);
         }
 
         else{
