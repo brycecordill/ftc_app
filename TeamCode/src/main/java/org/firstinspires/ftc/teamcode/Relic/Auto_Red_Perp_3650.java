@@ -141,7 +141,10 @@ public class Auto_Red_Perp_3650 extends LinearOpMode {
                 telemetry.update();
 
                 if (vuMark == RelicRecoveryVuMark.RIGHT) {
-                    turn2Angle(-90, imu);  //Turn left to be perp.
+                    setBothEncoder(900);
+                    setBothPower(.35);
+                    while (lDrive.isBusy()){ idle(); }
+                    turn2Angle(90, imu);
                     setBothEncoder(200);
                     setBothPower(.5);
                     turn = false;
@@ -149,15 +152,23 @@ public class Auto_Red_Perp_3650 extends LinearOpMode {
                     break;
                 }
                 else if (vuMark == RelicRecoveryVuMark.CENTER) {
-                    turn2Angle(-90, imu);
                     setBothEncoder(900);
+                    setBothPower(.35);
+
+                    while (lDrive.isBusy()){ idle(); }
+                    turn2Angle(90, imu);
+                    setBothEncoder(700);
                     setBothPower(.5);
                     while (lDrive.isBusy()){ idle(); }
                     break;
                 }
                 else if (vuMark == RelicRecoveryVuMark.LEFT) {
-                    turn2Angle(-90, imu);
-                    setBothEncoder(1600);
+                    setBothEncoder(900);
+                    setBothPower(.35);
+
+                    while (lDrive.isBusy()){ idle(); }
+                    turn2Angle(90, imu);
+                    setBothEncoder(1300);
                     setBothPower(.5);
                     while (lDrive.isBusy()){ idle(); }
                     break;
@@ -176,8 +187,7 @@ public class Auto_Red_Perp_3650 extends LinearOpMode {
         relicTrackables.deactivate(); // End Vuforia search
 
 
-
-        turn2Angle(90, imu); //Turn right (hopefully)
+        turn2Angle(-90, imu); //Turn right (hopefully)
 
         while (lDrive.isBusy()){ idle(); }
 
@@ -185,12 +195,12 @@ public class Auto_Red_Perp_3650 extends LinearOpMode {
         lift1.setPower(.99);
         Thread.sleep(500);
 
-        setBothEncoder(550);
+        setBothEncoder(400);
         setBothPower(.3);
         Thread.sleep(1000);
 
         grabber.setPosition(0.2);
-        Thread.sleep(700);
+        Thread.sleep(900);
         grabber.setPosition(0.5);
         Thread.sleep(1200);
 
@@ -213,7 +223,6 @@ public class Auto_Red_Perp_3650 extends LinearOpMode {
             setBothPower(.3);
             while (lDrive.isBusy() || lift1.isBusy()) { idle(); }
         }
-
     }
 
     // Turning method for IMU
@@ -223,9 +232,9 @@ public class Auto_Red_Perp_3650 extends LinearOpMode {
         initialHeading = getHeading(i);
         double relTarget = initialHeading + target;
         if (0 > target){
-            //Turn left
-            lDrive.setPower(-.35);
-            rDrive.setPower(.35);
+            //Turn right
+            lDrive.setPower(.35);
+            rDrive.setPower(-.35);
             while (Math.abs(relTarget - getHeading(i)) > 5){
                 telemetry.addData("degrees to target", Math.abs(getHeading(i) - relTarget));
                 telemetry.addData("current heading", getHeading(i));
@@ -234,10 +243,10 @@ public class Auto_Red_Perp_3650 extends LinearOpMode {
             }
         }
         else{
-            //Turn right
-            lDrive.setPower(.35);
-            rDrive.setPower(-.35);
-            while (Math.abs(relTarget - Math.abs(getHeading(i))) > 5){
+            //Turn left
+            lDrive.setPower(-.35);
+            rDrive.setPower(.35);
+            while (Math.abs(relTarget - getHeading(i)) > 5){
                 telemetry.addData("degrees to target", Math.abs(getHeading(i) - relTarget));
                 telemetry.addData("current heading", getHeading(i));
                 telemetry.update();
