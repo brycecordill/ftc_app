@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
-@Autonomous(name = "Auto Red Perp", group = "3650 Testing")
+@Autonomous(name = "Auto Red Perp", group = "3650 Prod")
 public class Auto_Red_Perp_3650 extends LinearOpMode {
 
     private VuforiaLocalizer vuforia;

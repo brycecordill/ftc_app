@@ -12,9 +12,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
-
-@Autonomous(name = "Auto Red Parallel", group = "3650 Prod")
-public class Auto_Red_Parallel_3650 extends LinearOpMode{
+@Autonomous(name = "Blue Parallel", group = "3650 Testing")
+public class Auto_Blue_Parallel_3650 extends LinearOpMode {
     private VuforiaLocalizer vuforia;
     private PrivateData priv = new PrivateData();
 
@@ -112,16 +111,16 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
         armServo.setPosition(armRetractedPos);
         Thread.sleep(500);
 
-        // Move far forward
-        setBothEncoder(2000);
+        // Move far backward
+        setBothEncoder(-2000);
         setBothPower(0.6);
 
         while (lDrive.isBusy()){ idle(); }
         setBothPower(0.0);
         Thread.sleep(400);
 
-        //Run backwards into stone (gets a consistent staring pos)
-        setBothEncoder(-1000);
+        //Run forwards into stone (gets a consistent staring pos)
+        setBothEncoder(1000);
         setBothPower(0.4);
 
 
@@ -140,21 +139,21 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
             if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
                 telemetry.addData("Key: ", vuMark);
                 telemetry.update();
-                if (vuMark == RelicRecoveryVuMark.RIGHT) {
-                    setBothEncoder(800);
+                if (vuMark == RelicRecoveryVuMark.LEFT) {
+                    setBothEncoder(-800);
                     setBothPower(.5);
                     turn = false;
                     while (lDrive.isBusy()){ idle(); }
                     break;
                 }
                 else if (vuMark == RelicRecoveryVuMark.CENTER) {
-                    setBothEncoder(1500);
+                    setBothEncoder(-1500);
                     setBothPower(.5);
                     while (lDrive.isBusy()){ idle(); }
                     break;
                 }
-                else if (vuMark == RelicRecoveryVuMark.LEFT) {
-                    setBothEncoder(2200);
+                else if (vuMark == RelicRecoveryVuMark.RIGHT) {
+                    setBothEncoder(-2200);
                     setBothPower(.5);
                     while (lDrive.isBusy()){ idle(); }
                     break;
@@ -173,7 +172,7 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
 
 
 
-        turn2Angle(-90, imu);
+        turn2Angle(-90, imu);  //CHECK (TURN RIGHT)
 
         while (lDrive.isBusy()){ idle(); }
 
@@ -207,7 +206,7 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
             grabber.setPosition(0.8);
             Thread.sleep(700);
             grabber.setPosition(0.5);
-            turn2Angle(-30, imu);
+            turn2Angle(30, imu);  //CHECK (TURN LEFT)
             while (lDrive.isBusy() || lift1.isBusy()) { idle(); }
             setBothEncoder(200);
             setBothPower(.3);
@@ -265,38 +264,5 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
 
         lDrive.setTargetPosition(encValue);
         rDrive.setTargetPosition(encValue);
-    }
-
-
-    //Don't use, it breaks things
-    void turnToAngle(double target, IMU_class a){
-        lDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        double converted_target;
-        initialHeading = getHeading(a);
-        converted_target= initialHeading + target;
-        double turnError;
-        while(Math.abs(converted_target - getHeading(a)) > 3) {
-            turnError = converted_target - getHeading(a);
-            if(Math.abs(turnError) > 180){
-                turnError = turnError - Math.signum(turnError) * 360;
-            }
-            if(Math.abs(turnError) > 30){
-                lDrive.setPower(-Math.signum(turnError) * 0.3);
-                rDrive.setPower(Math.signum(turnError) * 0.3);
-            }
-            else{
-                lDrive.setPower(-Math.signum(turnError) * (0.06 + turnError/30 * 0.24));
-                rDrive.setPower(Math.signum(turnError) * (0.06 + turnError/30 * 0.24));
-            }
-            telemetry.addData("degrees to target", Math.abs(getHeading(a) - converted_target));
-            telemetry.addData("current heading", getHeading(a));
-            telemetry.update();
-        }
-        lDrive.setPower(0);
-        rDrive.setPower(0);
-        lDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
     }
 }

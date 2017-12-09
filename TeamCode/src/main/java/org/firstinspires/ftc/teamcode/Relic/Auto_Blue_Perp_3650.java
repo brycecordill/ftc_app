@@ -12,9 +12,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
-
-@Autonomous(name = "Auto Red Parallel", group = "3650 Prod")
-public class Auto_Red_Parallel_3650 extends LinearOpMode{
+@Autonomous(name = "Blue Perpendicular", group = "3650 Testing")
+public class Auto_Blue_Perp_3650 extends LinearOpMode {
     private VuforiaLocalizer vuforia;
     private PrivateData priv = new PrivateData();
 
@@ -24,7 +23,7 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
 
     private double initialHeading;
 
-    @Override // Main Auto method
+    @Override
     public void runOpMode() throws InterruptedException {
         double armExtendedPos = 0.0;
         double armRetractedPos = 0.75;
@@ -72,7 +71,6 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
         // END VUFORIA
 
 
-
         waitForStart();
 
         grabber.setPosition(.8);
@@ -86,7 +84,8 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
 
 
         armServo.setPosition(armExtendedPos);
-        Thread.sleep(2000);
+
+        while (lift1.isBusy()){ idle(); }
 
         /*
         //Move back
@@ -104,7 +103,6 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
             telemetry.update();
         }*/
 
-        //Thread.sleep(2000);
 
         lift1.setPower(0);
         setBothPower(0);
@@ -112,16 +110,16 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
         armServo.setPosition(armRetractedPos);
         Thread.sleep(500);
 
-        // Move far forward
-        setBothEncoder(2000);
-        setBothPower(0.6);
+        // Move far backward
+        setBothEncoder(-2000);
+        setBothPower(0.5);
 
         while (lDrive.isBusy()){ idle(); }
         setBothPower(0.0);
         Thread.sleep(400);
 
-        //Run backwards into stone (gets a consistent staring pos)
-        setBothEncoder(-1000);
+        //Run forwards into stone (gets a consistent staring pos)
+        setBothEncoder(1000);
         setBothPower(0.4);
 
 
@@ -140,21 +138,36 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
             if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
                 telemetry.addData("Key: ", vuMark);
                 telemetry.update();
-                if (vuMark == RelicRecoveryVuMark.RIGHT) {
-                    setBothEncoder(800);
+
+                if (vuMark == RelicRecoveryVuMark.LEFT) {
+                    setBothEncoder(-900);
+                    setBothPower(.35);
+                    while (lDrive.isBusy()){ idle(); }
+                    turn2Angle(-90, imu); //CHECK (TURN RIGHT)
+                    setBothEncoder(-200);
                     setBothPower(.5);
                     turn = false;
                     while (lDrive.isBusy()){ idle(); }
                     break;
                 }
                 else if (vuMark == RelicRecoveryVuMark.CENTER) {
-                    setBothEncoder(1500);
+                    setBothEncoder(-900);
+                    setBothPower(.35);
+
+                    while (lDrive.isBusy()){ idle(); }
+                    turn2Angle(-90, imu); //SAME
+                    setBothEncoder(-700);
                     setBothPower(.5);
                     while (lDrive.isBusy()){ idle(); }
                     break;
                 }
-                else if (vuMark == RelicRecoveryVuMark.LEFT) {
-                    setBothEncoder(2200);
+                else if (vuMark == RelicRecoveryVuMark.RIGHT) {
+                    setBothEncoder(-900);
+                    setBothPower(.35);
+
+                    while (lDrive.isBusy()){ idle(); }
+                    turn2Angle(-90, imu); //SAME
+                    setBothEncoder(-1300);
                     setBothPower(.5);
                     while (lDrive.isBusy()){ idle(); }
                     break;
@@ -169,11 +182,11 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
         }
 
 
+
         relicTrackables.deactivate(); // End Vuforia search
 
 
-
-        turn2Angle(-90, imu);
+        turn2Angle(-90, imu); //Turn right (hopefully)
 
         while (lDrive.isBusy()){ idle(); }
 
@@ -181,33 +194,29 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
         lift1.setPower(.99);
         Thread.sleep(500);
 
-        setBothEncoder(550);
+        setBothEncoder(400);
         setBothPower(.3);
         Thread.sleep(1000);
 
         grabber.setPosition(0.2);
-        Thread.sleep(700);
+        Thread.sleep(900);
         grabber.setPosition(0.5);
         Thread.sleep(1200);
 
-        setBothEncoder(-400);
-        setBothPower(.3);
-
-        lift1.setTargetPosition(0);
-        lift1.setPower(.5);
-        while (lDrive.isBusy() || lift1.isBusy()){ idle(); }
 
 
         if (turn) {
-
-            setBothEncoder(-200);
+            setBothEncoder(-600);
             setBothPower(.3);
-            while (lDrive.isBusy()) { idle(); }
+
+            lift1.setTargetPosition(0);
+            lift1.setPower(.5);
+            while (lDrive.isBusy() || lift1.isBusy()){ idle(); }
 
             grabber.setPosition(0.8);
             Thread.sleep(700);
             grabber.setPosition(0.5);
-            turn2Angle(-30, imu);
+            turn2Angle(30, imu); //CHECK (TURN LEFT)
             while (lDrive.isBusy() || lift1.isBusy()) { idle(); }
             setBothEncoder(200);
             setBothPower(.3);
@@ -246,7 +255,6 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
         setBothPower(0.0);
     }
 
-
     // Get heading for IMU
     double getHeading(IMU_class a){
         return a.getAngles()[0];
@@ -265,38 +273,5 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
 
         lDrive.setTargetPosition(encValue);
         rDrive.setTargetPosition(encValue);
-    }
-
-
-    //Don't use, it breaks things
-    void turnToAngle(double target, IMU_class a){
-        lDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        double converted_target;
-        initialHeading = getHeading(a);
-        converted_target= initialHeading + target;
-        double turnError;
-        while(Math.abs(converted_target - getHeading(a)) > 3) {
-            turnError = converted_target - getHeading(a);
-            if(Math.abs(turnError) > 180){
-                turnError = turnError - Math.signum(turnError) * 360;
-            }
-            if(Math.abs(turnError) > 30){
-                lDrive.setPower(-Math.signum(turnError) * 0.3);
-                rDrive.setPower(Math.signum(turnError) * 0.3);
-            }
-            else{
-                lDrive.setPower(-Math.signum(turnError) * (0.06 + turnError/30 * 0.24));
-                rDrive.setPower(Math.signum(turnError) * (0.06 + turnError/30 * 0.24));
-            }
-            telemetry.addData("degrees to target", Math.abs(getHeading(a) - converted_target));
-            telemetry.addData("current heading", getHeading(a));
-            telemetry.update();
-        }
-        lDrive.setPower(0);
-        rDrive.setPower(0);
-        lDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
     }
 }
