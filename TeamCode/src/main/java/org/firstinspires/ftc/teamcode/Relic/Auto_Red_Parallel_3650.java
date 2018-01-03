@@ -23,6 +23,8 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
     private ColorSensor cSensor;
 
     private double initialHeading;
+    int count = 0;
+    boolean detected = false;
 
     @Override // Main Auto method
     public void runOpMode() throws InterruptedException {
@@ -81,7 +83,7 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
         lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        lift1.setTargetPosition(6000);
+        lift1.setTargetPosition(600); //Need to change this!!
         lift1.setPower(.99);
 
 
@@ -135,7 +137,7 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
         Thread.sleep(1000);
 
         boolean turn = true;
-        while(opModeIsActive()){
+        while(opModeIsActive() && count < 500){
             RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
             if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
                 telemetry.addData("Key: ", vuMark);
@@ -144,18 +146,21 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
                     setBothEncoder(800);
                     setBothPower(.5);
                     turn = false;
+                    detected = true;
                     while (lDrive.isBusy()){ idle(); }
                     break;
                 }
                 else if (vuMark == RelicRecoveryVuMark.CENTER) {
                     setBothEncoder(1500);
                     setBothPower(.5);
+                    detected = true;
                     while (lDrive.isBusy()){ idle(); }
                     break;
                 }
                 else if (vuMark == RelicRecoveryVuMark.LEFT) {
                     setBothEncoder(2200);
                     setBothPower(.5);
+                    detected = true;
                     while (lDrive.isBusy()){ idle(); }
                     break;
                 }
@@ -166,6 +171,15 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
                 telemetry.addData("No key detected!", null);
             }
             telemetry.update();
+            count++;
+            idle();
+        }
+
+        if (!detected){
+            setBothEncoder(1500);
+            setBothPower(.5);
+            detected = true;
+            while (lDrive.isBusy()){ idle(); }
         }
 
 
@@ -177,7 +191,7 @@ public class Auto_Red_Parallel_3650 extends LinearOpMode{
 
         while (lDrive.isBusy()){ idle(); }
 
-        lift1.setTargetPosition(1000);
+        lift1.setTargetPosition(2000);
         lift1.setPower(.99);
         Thread.sleep(500);
 

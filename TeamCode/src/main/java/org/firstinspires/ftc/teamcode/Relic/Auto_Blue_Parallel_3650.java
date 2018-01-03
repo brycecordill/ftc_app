@@ -23,6 +23,9 @@ public class Auto_Blue_Parallel_3650 extends LinearOpMode {
 
     private double initialHeading;
 
+    int count = 0;
+    boolean camera = false;
+
     @Override // Main Auto method
     public void runOpMode() throws InterruptedException {
         double armExtendedPos = 0.0;
@@ -80,7 +83,7 @@ public class Auto_Blue_Parallel_3650 extends LinearOpMode {
         lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        lift1.setTargetPosition(6000);
+        lift1.setTargetPosition(600);
         lift1.setPower(.99);
 
 
@@ -134,7 +137,7 @@ public class Auto_Blue_Parallel_3650 extends LinearOpMode {
         Thread.sleep(1000);
 
         boolean turn = true;
-        while(opModeIsActive()){
+        /*while(opModeIsActive() && count < 300){
             RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
             if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
                 telemetry.addData("Key: ", vuMark);
@@ -165,6 +168,12 @@ public class Auto_Blue_Parallel_3650 extends LinearOpMode {
                 telemetry.addData("No key detected!", null);
             }
             telemetry.update();
+            idle();
+        }*/
+        setBothEncoder(-1500);
+        setBothPower(.4);
+        while (lDrive.isBusy()){
+            idle();
         }
 
 
@@ -176,7 +185,7 @@ public class Auto_Blue_Parallel_3650 extends LinearOpMode {
 
         while (lDrive.isBusy()){ idle(); }
 
-        lift1.setTargetPosition(1000);
+        lift1.setTargetPosition(200);
         lift1.setPower(.99);
         Thread.sleep(500);
 

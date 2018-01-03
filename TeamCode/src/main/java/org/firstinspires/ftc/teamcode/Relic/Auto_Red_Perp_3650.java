@@ -23,6 +23,8 @@ public class Auto_Red_Perp_3650 extends LinearOpMode {
     private ColorSensor cSensor;
 
     private double initialHeading;
+    int count = 0;
+    boolean detected = false;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -80,7 +82,7 @@ public class Auto_Red_Perp_3650 extends LinearOpMode {
         lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        lift1.setTargetPosition(6000);
+        lift1.setTargetPosition(600);
         lift1.setPower(.99);
 
 
@@ -134,7 +136,7 @@ public class Auto_Red_Perp_3650 extends LinearOpMode {
         Thread.sleep(1000);
 
         boolean turn = true;
-        while(opModeIsActive()){
+        while(opModeIsActive() && count < 500){
             RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
             if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
                 telemetry.addData("Key: ", vuMark);
@@ -148,6 +150,7 @@ public class Auto_Red_Perp_3650 extends LinearOpMode {
                     setBothEncoder(200);
                     setBothPower(.5);
                     turn = false;
+                    detected = true;
                     while (lDrive.isBusy()){ idle(); }
                     break;
                 }
@@ -159,6 +162,7 @@ public class Auto_Red_Perp_3650 extends LinearOpMode {
                     turn2Angle(90, imu);
                     setBothEncoder(700);
                     setBothPower(.5);
+                    detected = true;
                     while (lDrive.isBusy()){ idle(); }
                     break;
                 }
@@ -170,6 +174,7 @@ public class Auto_Red_Perp_3650 extends LinearOpMode {
                     turn2Angle(90, imu);
                     setBothEncoder(1300);
                     setBothPower(.5);
+                    detected = true;
                     while (lDrive.isBusy()){ idle(); }
                     break;
                 }
@@ -180,18 +185,30 @@ public class Auto_Red_Perp_3650 extends LinearOpMode {
                 telemetry.addData("No key detected!", null);
             }
             telemetry.update();
+            count++;
+            idle();
         }
 
 
 
         relicTrackables.deactivate(); // End Vuforia search
 
+        if (!detected){
+            setBothEncoder(900);
+            setBothPower(.35);
+
+            while (lDrive.isBusy()){ idle(); }
+            turn2Angle(90, imu);
+            setBothEncoder(700);
+            setBothPower(.5);
+            while (lDrive.isBusy()){ idle(); }
+        }
 
         turn2Angle(-90, imu); //Turn right (hopefully)
 
         while (lDrive.isBusy()){ idle(); }
 
-        lift1.setTargetPosition(1000);
+        lift1.setTargetPosition(200);
         lift1.setPower(.99);
         Thread.sleep(500);
 
