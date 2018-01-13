@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 
-@Autonomous(name = "Auto Red -| (V2)", group = "3650 Testing")
+@Autonomous(name = "Auto RED -| (V2)", group = "3650 Prod")
 public class Auto_Red_perpV2 extends LinearOpMode {
     private VuforiaLocalizer vuforia;
     private PrivateData priv = new PrivateData();
@@ -26,8 +26,8 @@ public class Auto_Red_perpV2 extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        double armExtendedPos = 0.0;
-        double armRetractedPos = 0.75;
+        double armExtendedPos = 0.1;
+        double armRetractedPos = 0.6;
 
         IMU_class imu = new IMU_class("imu", hardwareMap);
         initialHeading = getHeading(imu);
@@ -41,6 +41,8 @@ public class Auto_Red_perpV2 extends LinearOpMode {
         rDrive.setDirection(DcMotor.Direction.REVERSE);
 
         lift1 = hardwareMap.dcMotor.get("lift1");
+        lift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lift1.setDirection(DcMotor.Direction.REVERSE);
 
 
         armServo = hardwareMap.servo.get("armServo");
@@ -77,17 +79,16 @@ public class Auto_Red_perpV2 extends LinearOpMode {
 
         //Move grabber/lift
         grabber.setPosition(.8);
-        Thread.sleep(500);
+        Thread.sleep(900);
 
         lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         lift1.setTargetPosition(600); //Need to change this!!
-        lift1.setPower(.99);
+        lift1.setPower(.7);
 
         //Down servo
         armServo.setPosition(armExtendedPos);
-        Thread.sleep(1000);
 
         relicTrackables.activate(); // Start Vuforia object search
         Thread.sleep(1000);
@@ -95,7 +96,7 @@ public class Auto_Red_perpV2 extends LinearOpMode {
         int col = -2; //1=R, 0=C, -1=L, -2=undetected
         long startTime = System.currentTimeMillis();
 
-        while(opModeIsActive() && (System.currentTimeMillis()-startTime) < 4000){ //Run for 4 secs
+        while(opModeIsActive() && (System.currentTimeMillis()-startTime) < 3000){ //Run for 3 secs
             RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
             if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
                 telemetry.addData("Key: ", vuMark);
@@ -126,15 +127,17 @@ public class Auto_Red_perpV2 extends LinearOpMode {
         relicTrackables.deactivate(); // End Vuforia search
 
         if (cSensor.blue() > cSensor.red()){
-            //Move back if blue (NEED TO CHECK)
-            setBothEncoder(-600);
-            setBothPower(.4);
+            setBothEncoder(-250);
+            setBothPower(.3);
             while (lDrive.isBusy()){ idle(); }
             armServo.setPosition(armRetractedPos);
+            setBothEncoder(300);
+            setBothPower(.4);
+            while (lDrive.isBusy()){ idle(); }
         }
 
         // Move far forward
-        setBothEncoder(2000);
+        setBothEncoder(2900);
         setBothPower(0.4);
 
         while (lDrive.isBusy()){ idle(); }
@@ -143,54 +146,65 @@ public class Auto_Red_perpV2 extends LinearOpMode {
         Thread.sleep(400);
 
         //Run backwards into stone (gets a consistent staring pos)
-        setBothEncoder(-1000);
-        setBothPower(0.4);
+        setBothEncoder(-800);
+        setBothPower(0.3);
         while (lDrive.isBusy()){ idle(); }
+        Thread.sleep(500);
 
-        setBothEncoder(900);
+        setBothEncoder(1100);
         setBothPower(0.4);
-        while (lDrive.isBusy()){ idle(); }
+        while (lDrive.isBusy() && rDrive.isBusy()){ idle(); }
 
-        turn2Angle(90, imu);
+        turn2Angle(85, imu);
+        Thread.sleep(600);
 
 
         if (col == 1){
-            setBothEncoder(200);
+            setBothEncoder(275); //Good!
             setBothPower(.4);
         }
         else if (col == 0){
-            setBothEncoder(700);
+            setBothEncoder(1300); //Good!
             setBothPower(.4);
         }
         else if (col == -1){
-            setBothEncoder(1300);
+            setBothEncoder(2250); //Good!
             setBothPower(.4);
         }
         else {
             //Go for center
-            setBothEncoder(700);
+            setBothEncoder(1300);
             setBothPower(.4);
         }
 
         while (lDrive.isBusy()){ idle(); }
 
         //Turn right (final turn)
-        turn2Angle(-90, imu);
+        turn2Angle(-85, imu);
 
         lift1.setTargetPosition(200);
-        lift1.setPower(.99);
+        lift1.setPower(.7);
         Thread.sleep(500);
 
-        setBothEncoder(400);
+        setBothEncoder(650); //Last forward
         setBothPower(.3);
         Thread.sleep(1000);
 
         grabber.setPosition(0.2);
-        Thread.sleep(900);
+        Thread.sleep(1300);
         grabber.setPosition(0.5);
         Thread.sleep(1200);
 
-        if (col != 1) {
+        while (lDrive.isBusy()){ idle(); }
+        lift1.setTargetPosition(0);
+        lift1.setPower(.7);
+        setBothEncoder(-700);  //Last back
+        setBothPower(.3);
+        while (lDrive.isBusy()){ idle(); }
+
+
+
+        /*if (col != 1) {
             setBothEncoder(-600);
             setBothPower(.3);
 
@@ -206,7 +220,7 @@ public class Auto_Red_perpV2 extends LinearOpMode {
             setBothEncoder(200);
             setBothPower(.3);
             while (lDrive.isBusy() || lift1.isBusy()) { idle(); }
-        }
+        }*/
     }
 
     // Turning method for IMU

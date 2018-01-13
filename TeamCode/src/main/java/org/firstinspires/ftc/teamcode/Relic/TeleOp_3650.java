@@ -10,15 +10,18 @@ import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp(name = "Operation Telly Relic", group = "3650 Prod")
 public class TeleOp_3650 extends OpMode{
     private DcMotor lDrive, rDrive, lift1;
-    private Servo armServo, grabber;
+    private Servo stoneServo, grabber;
+    private double stoneUp, stoneDown;
 
-    boolean motorBusy = false;
     IMU_class imu;
     double initialHeading;
 
 
     @Override
     public void init() {
+        stoneUp = 0.6;
+        stoneDown = 0.2;
+
         imu = new IMU_class("imu", hardwareMap);
         initialHeading = getHeading(imu);
         rDrive = hardwareMap.dcMotor.get("rDrive");
@@ -27,12 +30,13 @@ public class TeleOp_3650 extends OpMode{
         lDrive.setDirection(DcMotor.Direction.REVERSE);
 
         lift1 = hardwareMap.dcMotor.get("lift1");
+        lift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lift1.setDirection(DcMotor.Direction.REVERSE);
         lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
-        armServo = hardwareMap.servo.get("armServo");
-        armServo.setPosition(0.5);
+        stoneServo = hardwareMap.servo.get("stoneServo");
         grabber = hardwareMap.servo.get("grabber");
         grabber.setPosition(0.5);
 
@@ -42,34 +46,31 @@ public class TeleOp_3650 extends OpMode{
     public void loop() {
 
         if (gamepad2.a){
-            lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            lift1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            stoneServo.setPosition(stoneDown);
+        }
+        else if (gamepad2.y){
+            stoneServo.setPosition(stoneUp);
         }
 
-        if (gamepad1.x){ // Spin 180ish degrees with one button
-            motorBusy = true;
+       // if (gamepad1.x){ // Spin 180ish degrees with one button
             //MIGHT need to thread this
-            turn2Angle(-179, imu);
-        }
-        else if(!lDrive.isBusy()){
-            motorBusy = false;
+         //   turn2Angle(-179, imu);
+        //}
+
+        if (gamepad1.a) {
+            lDrive.setPower(.6);
+            rDrive.setPower(.6);
+        } else if (gamepad1.y) {
+            lDrive.setPower(-.6);
+            rDrive.setPower(-.6);
+        } else if (gamepad1.b) {  // full forward
+            lDrive.setPower(-.99);
+            rDrive.setPower(-.99);
+        } else {
+            lDrive.setPower(gamepad1.left_stick_y * .6);
+            rDrive.setPower(gamepad1.right_stick_y * .6);
         }
 
-        if (!motorBusy) {
-            if (gamepad1.a) {
-                lDrive.setPower(.6);
-                rDrive.setPower(.6);
-            } else if (gamepad1.y) {
-                lDrive.setPower(-.6);
-                rDrive.setPower(-.6);
-            } else if (gamepad1.b) {  // full forward
-                lDrive.setPower(-.99);
-                rDrive.setPower(-.99);
-            } else {
-                lDrive.setPower(gamepad1.left_stick_y * .6);
-                rDrive.setPower(gamepad1.right_stick_y * .6);
-            }
-        }
 
         // lift
         if (gamepad2.right_trigger > 0.1){
@@ -83,13 +84,6 @@ public class TeleOp_3650 extends OpMode{
             lift1.setPower(0);
         }
 
-        // armServo
-        if (gamepad1.dpad_up) {
-            armServo.setPosition(.75);
-        }
-        else if (gamepad1.dpad_down){
-            armServo.setPosition(.1);
-        }
 
         // Grabber servo (Need to test values!)
         if (gamepad2.dpad_left){
@@ -106,7 +100,7 @@ public class TeleOp_3650 extends OpMode{
         }
 
         telemetry.addData("Encoder value: ", lift1.getCurrentPosition());
-        telemetry.addData("Servo value: ", armServo.getPosition());
+        telemetry.addData("Servo value: ", stoneServo.getPosition());
 
     }
     void turn2Angle(double target, IMU_class i){
@@ -134,6 +128,7 @@ public class TeleOp_3650 extends OpMode{
                 telemetry.update();
             }
         }
+        initialHeading = getHeading(imu);
         setBothPower(0.0);
     }
     double getHeading(IMU_class a){

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Relic;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
+@Disabled
 @Autonomous(name = "Auto Red Perp", group = "3650 Prod")
 public class Auto_Red_Perp_3650 extends LinearOpMode {
 
@@ -28,7 +30,7 @@ public class Auto_Red_Perp_3650 extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        double armExtendedPos = 0.0;
+        double armExtendedPos = 0.1;
         double armRetractedPos = 0.75;
 
         IMU_class imu = new IMU_class("imu", hardwareMap);
@@ -43,6 +45,8 @@ public class Auto_Red_Perp_3650 extends LinearOpMode {
         rDrive.setDirection(DcMotor.Direction.REVERSE);
 
         lift1 = hardwareMap.dcMotor.get("lift1");
+        lift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lift1.setDirection(DcMotor.Direction.REVERSE);
 
 
         armServo = hardwareMap.servo.get("armServo");

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Relic;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -9,10 +10,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
-/**
- * Created by Bryce on 9/11/2017.
- */
 
+@Disabled
 @Autonomous(name="Automagical 1", group ="3650 Testing")
 public class Automagical_1_3650 extends LinearOpMode {
 
