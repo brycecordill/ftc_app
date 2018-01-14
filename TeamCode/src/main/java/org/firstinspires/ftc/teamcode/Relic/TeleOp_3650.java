@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp(name = "Operation Telly Relic", group = "3650 Prod")
 public class TeleOp_3650 extends OpMode{
     private DcMotor lDrive, rDrive, lift1;
-    private Servo stoneServo, grabber;
+    private Servo stoneServo, grabber, armServo;
     private double stoneUp, stoneDown;
 
     IMU_class imu;
@@ -21,6 +21,9 @@ public class TeleOp_3650 extends OpMode{
     public void init() {
         stoneUp = 0.6;
         stoneDown = 0.2;
+
+        armServo = hardwareMap.servo.get("armServo");
+        armServo.setPosition(0.6);
 
         imu = new IMU_class("imu", hardwareMap);
         initialHeading = getHeading(imu);

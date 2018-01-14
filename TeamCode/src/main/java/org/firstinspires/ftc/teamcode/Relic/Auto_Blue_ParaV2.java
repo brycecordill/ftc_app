@@ -101,13 +101,13 @@ public class Auto_Blue_ParaV2 extends LinearOpMode {
                 telemetry.addData("Key: ", vuMark);
                 telemetry.update();
                 if (vuMark == RelicRecoveryVuMark.RIGHT) {
-                    col = 1;
+                    col = -1;
                     break;
                 } else if (vuMark == RelicRecoveryVuMark.CENTER) {
                     col = 0;
                     break;
                 } else if (vuMark == RelicRecoveryVuMark.LEFT) {
-                    col = -1;
+                    col = 1;
                     break;
                 }
 
