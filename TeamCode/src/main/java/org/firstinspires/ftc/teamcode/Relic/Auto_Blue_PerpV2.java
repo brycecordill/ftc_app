@@ -123,13 +123,13 @@ public class Auto_Blue_PerpV2 extends LinearOpMode {
         if (cSensor.blue() > cSensor.red()) {
             setBothEncoder(250);
             setBothPower(.3);
-            while (lDrive.isBusy()) {
+            while (opModeIsActive() && lDrive.isBusy()) {
                 idle();
             }
             armServo.setPosition(armRetractedPos);
             setBothEncoder(-300);
             setBothPower(.4);
-            while (lDrive.isBusy()) {
+            while (opModeIsActive() && lDrive.isBusy()) {
                 idle();
             }
         }
@@ -138,7 +138,7 @@ public class Auto_Blue_PerpV2 extends LinearOpMode {
         setBothEncoder(-2900);
         setBothPower(0.4);
 
-        while (lDrive.isBusy()) {
+        while (opModeIsActive() && lDrive.isBusy()) {
             idle();
         }
         setBothPower(0.0);
@@ -148,14 +148,14 @@ public class Auto_Blue_PerpV2 extends LinearOpMode {
         //Run forwards into stone (gets a consistent staring pos)
         setBothEncoder(450);
         setBothPower(0.3);
-        while (lDrive.isBusy()) {
+        while (opModeIsActive() && lDrive.isBusy()) {
             idle();
         }
         Thread.sleep(500);
 
         setBothEncoder(-400);
         setBothPower(0.4);
-        while (lDrive.isBusy() && rDrive.isBusy()) {
+        while (opModeIsActive() && lDrive.isBusy() && rDrive.isBusy()) {
             idle();
         }
 
@@ -178,7 +178,7 @@ public class Auto_Blue_PerpV2 extends LinearOpMode {
             setBothPower(.4);
         }
 
-        while (lDrive.isBusy()) {
+        while (opModeIsActive() && lDrive.isBusy()) {
             idle();
         }
 
@@ -198,14 +198,14 @@ public class Auto_Blue_PerpV2 extends LinearOpMode {
         grabber.setPosition(0.5);
         Thread.sleep(1200);
 
-        while (lDrive.isBusy()) {
+        while (opModeIsActive() && lDrive.isBusy()) {
             idle();
         }
         lift1.setTargetPosition(0);
         lift1.setPower(.7);
         setBothEncoder(-900);  //Last back
         setBothPower(.3);
-        while (lDrive.isBusy()) {
+        while (opModeIsActive() && lDrive.isBusy()) {
             idle();
         }
     }
@@ -220,7 +220,7 @@ public class Auto_Blue_PerpV2 extends LinearOpMode {
             //Turn right
             lDrive.setPower(.35);
             rDrive.setPower(-.35);
-            while (Math.abs(relTarget - getHeading(i)) > 5) {
+            while (opModeIsActive() && Math.abs(relTarget - getHeading(i)) > 5) {
                 telemetry.addData("degrees to target", Math.abs(getHeading(i) - relTarget));
                 telemetry.addData("current heading", getHeading(i));
                 telemetry.update();
@@ -230,7 +230,7 @@ public class Auto_Blue_PerpV2 extends LinearOpMode {
             //Turn left
             lDrive.setPower(-.35);
             rDrive.setPower(.35);
-            while (Math.abs(relTarget - getHeading(i)) > 5) {
+            while (opModeIsActive() && Math.abs(relTarget - getHeading(i)) > 5) {
                 telemetry.addData("degrees to target", Math.abs(getHeading(i) - relTarget));
                 telemetry.addData("current heading", getHeading(i));
                 telemetry.update();

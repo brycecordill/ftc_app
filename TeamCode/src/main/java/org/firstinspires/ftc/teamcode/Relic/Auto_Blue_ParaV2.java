@@ -94,6 +94,7 @@ public class Auto_Blue_ParaV2 extends LinearOpMode {
 
         int col = -2; //1=R, 0=C, -1=L, -2=undetected
         long startTime = System.currentTimeMillis();
+        
 
         while (opModeIsActive() && (System.currentTimeMillis() - startTime) < 3000) { //Run for 3 secs
             RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
@@ -125,13 +126,13 @@ public class Auto_Blue_ParaV2 extends LinearOpMode {
             //Move forward if blue
             setBothEncoder(300);
             setBothPower(.3);
-            while (lDrive.isBusy()) {
+            while (opModeIsActive() && lDrive.isBusy()) {
                 idle();
             }
             armServo.setPosition(armRetractedPos);
             setBothEncoder(-300);
             setBothPower(.4);
-            while (lDrive.isBusy()) {
+            while (opModeIsActive() && lDrive.isBusy()) {
                 idle();
             }
         }
@@ -141,7 +142,7 @@ public class Auto_Blue_ParaV2 extends LinearOpMode {
         setBothPower(0.4);
         Thread.sleep(300);
 
-        while (lDrive.isBusy()) {
+        while (opModeIsActive() && lDrive.isBusy()) {
             idle();
         }
         setBothPower(0.0);
@@ -151,7 +152,7 @@ public class Auto_Blue_ParaV2 extends LinearOpMode {
         setBothEncoder(400);
         setBothPower(0.3);
 
-        while (lDrive.isBusy()) {
+        while (opModeIsActive() && lDrive.isBusy()) {
             idle();
         }
         Thread.sleep(1000);
@@ -171,13 +172,13 @@ public class Auto_Blue_ParaV2 extends LinearOpMode {
             setBothPower(.5);
         }
 
-        while (lDrive.isBusy()) {
+        while (opModeIsActive() && lDrive.isBusy()) {
             idle();
         }
 
         turn2Angle(-90, imu);
 
-        while (lDrive.isBusy()) {
+        while (opModeIsActive() && lDrive.isBusy()) {
             idle();
         }
 
@@ -199,7 +200,7 @@ public class Auto_Blue_ParaV2 extends LinearOpMode {
 
         lift1.setTargetPosition(0);
         lift1.setPower(.5);
-        while (lDrive.isBusy() || lift1.isBusy()) {
+        while (opModeIsActive() && lDrive.isBusy() || lift1.isBusy()) {
             idle();
         }
     }
@@ -214,7 +215,7 @@ public class Auto_Blue_ParaV2 extends LinearOpMode {
             //Turn right
             lDrive.setPower(.35);
             rDrive.setPower(-.35);
-            while (Math.abs(relTarget - getHeading(i)) > 5) {
+            while (opModeIsActive() && Math.abs(relTarget - getHeading(i)) > 5) {
                 telemetry.addData("degrees to target", Math.abs(getHeading(i) - relTarget));
                 telemetry.addData("current heading", getHeading(i));
                 telemetry.update();
@@ -224,7 +225,7 @@ public class Auto_Blue_ParaV2 extends LinearOpMode {
             //Turn left
             lDrive.setPower(-.35);
             rDrive.setPower(.35);
-            while (Math.abs(relTarget - getHeading(i)) > 5) {
+            while (opModeIsActive() && Math.abs(relTarget - getHeading(i)) > 5) {
                 telemetry.addData("degrees to target", Math.abs(getHeading(i) - relTarget));
                 telemetry.addData("current heading", getHeading(i));
                 telemetry.update();
