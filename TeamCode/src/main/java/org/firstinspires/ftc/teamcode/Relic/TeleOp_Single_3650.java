@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.Relic;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-
+@Disabled
 @TeleOp(name = "TeleOp Single Relic", group = "3650 Prod")
 public class TeleOp_Single_3650 extends OpMode {
     private DcMotor lDrive, rDrive, lift1;

@@ -77,10 +77,10 @@ public class TeleOp_3650 extends OpMode{
 
         // lift
         if (gamepad2.right_trigger > 0.1){
-            lift1.setPower(gamepad2.right_trigger);
+            lift1.setPower(.8*gamepad2.right_trigger);
         }
         else if (gamepad2.left_trigger > 0.1){
-            lift1.setPower(-gamepad2.left_trigger);
+            lift1.setPower(.8*-gamepad2.left_trigger);
         }
 
         else{
