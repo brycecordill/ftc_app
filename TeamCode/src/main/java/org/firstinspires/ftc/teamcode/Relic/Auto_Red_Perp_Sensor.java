@@ -127,11 +127,11 @@ public class Auto_Red_Perp_Sensor extends LinearOpMode{
         relicTrackables.deactivate(); // End Vuforia search
 
         if (cSensor.blue() > cSensor.red()){
-            setBothEncoder(-250);
+            setBothEncoder(-350);
             setBothPower(.3);
             while (opModeIsActive() && lDrive.isBusy()){ idle(); }
             armServo.setPosition(armRetractedPos);
-            setBothEncoder(300);
+            setBothEncoder(400);
             setBothPower(.4);
             while (opModeIsActive() && lDrive.isBusy()){ idle(); }
         }
@@ -146,7 +146,7 @@ public class Auto_Red_Perp_Sensor extends LinearOpMode{
         Thread.sleep(400);
 
         //Run backwards into stone (gets a consistent staring pos)
-        setBothEncoder(-800);
+        setBothEncoder(-600);
         setBothPower(0.3);
         while (opModeIsActive() && lDrive.isBusy()){ idle(); }
         Thread.sleep(500);
@@ -157,6 +157,10 @@ public class Auto_Red_Perp_Sensor extends LinearOpMode{
 
         turn2Angle(85, imu);
         Thread.sleep(600);
+
+        setBothEncoder(-300);
+        setBothPower(0.3);
+        while (opModeIsActive() && lDrive.isBusy() && rDrive.isBusy()){ idle(); }
 
 
         findCenter();

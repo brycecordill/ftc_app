@@ -148,14 +148,14 @@ public class Auto_Blue_Perp_Sensor extends LinearOpMode{
         Thread.sleep(400);
 
         //Run forwards into stone (gets a consistent staring pos)
-        setBothEncoder(450);
+        setBothEncoder(350);
         setBothPower(0.3);
         while (opModeIsActive() && lDrive.isBusy()) {
             idle();
         }
         Thread.sleep(500);
 
-        setBothEncoder(-400);
+        setBothEncoder(-300);
         setBothPower(0.4);
         while (opModeIsActive() && lDrive.isBusy() && rDrive.isBusy()) {
             idle();
@@ -169,19 +169,19 @@ public class Auto_Blue_Perp_Sensor extends LinearOpMode{
 
 
         if (col == 1) { //L
-            setBothEncoder(2100); //Good
+            setBothEncoder(2050); //Good
             Thread.sleep(200);
             setBothPower(.3);
         } else if (col == 0) { //C
-            setBothEncoder(1070); //Good
+            setBothEncoder(1020); //Good
             Thread.sleep(200);
             setBothPower(.3);
         } else if (col == -1) { //R
-            setBothEncoder(350); //Good
+            setBothEncoder(300); //Good
             Thread.sleep(200);
             setBothPower(.3);
         } else { //C
-            setBothEncoder(1070);
+            setBothEncoder(1020);
             Thread.sleep(200);
             setBothPower(.3);
         }

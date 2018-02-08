@@ -11,22 +11,16 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class TeleOp_3650 extends OpMode{
     private DcMotor lDrive, rDrive, lift1;
     private Servo stoneServo, grabber, armServo;
-    private double stoneUp, stoneDown;
 
-    IMU_class imu;
     double initialHeading;
 
 
     @Override
     public void init() {
-        stoneUp = 0.6;
-        stoneDown = 0.2;
-
+        
         armServo = hardwareMap.servo.get("armServo");
         armServo.setPosition(0.6);
 
-        imu = new IMU_class("imu", hardwareMap);
-        initialHeading = getHeading(imu);
         rDrive = hardwareMap.dcMotor.get("rDrive");
 
         lDrive = hardwareMap.dcMotor.get("lDrive");
@@ -48,12 +42,6 @@ public class TeleOp_3650 extends OpMode{
     @Override
     public void loop() {
 
-        if (gamepad2.a){
-            stoneServo.setPosition(stoneDown);
-        }
-        else if (gamepad2.y){
-            stoneServo.setPosition(stoneUp);
-        }
 
        // if (gamepad1.x){ // Spin 180ish degrees with one button
             //MIGHT need to thread this
@@ -66,9 +54,8 @@ public class TeleOp_3650 extends OpMode{
         } else if (gamepad1.y) {
             lDrive.setPower(-.6);
             rDrive.setPower(-.6);
-        } else if (gamepad1.b) {  // full forward
-            lDrive.setPower(-.99);
-            rDrive.setPower(-.99);
+        } else if (gamepad1.b) {  // full back
+            setBothPower(.99);
         } else {
             lDrive.setPower(gamepad1.left_stick_y * .6);
             rDrive.setPower(gamepad1.right_stick_y * .6);
@@ -80,7 +67,7 @@ public class TeleOp_3650 extends OpMode{
             lift1.setPower(.8*gamepad2.right_trigger);
         }
         else if (gamepad2.left_trigger > 0.1){
-            lift1.setPower(.8*-gamepad2.left_trigger);
+            lift1.setPower(-gamepad2.left_trigger);
         }
 
         else{
@@ -106,6 +93,7 @@ public class TeleOp_3650 extends OpMode{
         telemetry.addData("Servo value: ", stoneServo.getPosition());
 
     }
+    /*
     void turn2Angle(double target, IMU_class i){
         lDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -133,10 +121,7 @@ public class TeleOp_3650 extends OpMode{
         }
         initialHeading = getHeading(imu);
         setBothPower(0.0);
-    }
-    double getHeading(IMU_class a){
-        return a.getAngles()[0];
-    }
+    }*/
     void setBothPower(double power){
         lDrive.setPower(power);
         rDrive.setPower(power);

@@ -121,13 +121,13 @@ public class Auto_Red_Para_Sensor extends LinearOpMode {
 
         if (cSensor.blue() > cSensor.red()) {
             //Move back if blue (NEED TO CHECK)
-            setBothEncoder(-300);
+            setBothEncoder(-400);
             setBothPower(.3);
             while (opModeIsActive() && lDrive.isBusy()) {
                 idle();
             }
             armServo.setPosition(armRetractedPos);
-            setBothEncoder(300);
+            setBothEncoder(400);
             setBothPower(.4);
             while (opModeIsActive() && lDrive.isBusy()) {
                 idle();
@@ -146,8 +146,8 @@ public class Auto_Red_Para_Sensor extends LinearOpMode {
         armServo.setPosition(armRetractedPos);
 
         //Run backwards into stone (gets a consistent staring pos)
-        setBothEncoder(-800);
-        setBothPower(0.3);
+        //setBothEncoder(-800);
+        //setBothPower(0.3);
 
         while (opModeIsActive() && lDrive.isBusy()) {
             idle();
@@ -164,14 +164,14 @@ public class Auto_Red_Para_Sensor extends LinearOpMode {
             setBothEncoder(-350); //Good
             setBothPower(.5);
         } else if (col == 0) {
-            setBothEncoder(650);  //Good
+            setBothEncoder(550);  //Good
             setBothPower(.5);
         } else if (col == -1) {
-            setBothEncoder(1650); //Good
+            setBothEncoder(1550); //Good
             setBothPower(.5);
         } else {
             //Go for center
-            setBothEncoder(650);
+            setBothEncoder(550);
             setBothPower(.5);
         }
 
@@ -189,7 +189,7 @@ public class Auto_Red_Para_Sensor extends LinearOpMode {
         lift1.setPower(.7);
         Thread.sleep(500);
 
-        setBothEncoder(400);
+        setBothEncoder(600);
         setBothPower(.3);
         Thread.sleep(1000);
 
@@ -271,7 +271,7 @@ public class Auto_Red_Para_Sensor extends LinearOpMode {
         setBothPower(.3);
 
         long startTime = System.currentTimeMillis();
-        while (!redDetected1 && opModeIsActive() && System.currentTimeMillis() - startTime < 5000){
+        while (!redDetected1 && opModeIsActive() && System.currentTimeMillis() - startTime < 6000){
             //if the red val - the avg of the blue & green is less than x ...
             redDetected1 = (cSensor2.red() - (cSensor2.blue() + cSensor2.green()) / 2 > redThresh);
             //Check tail value

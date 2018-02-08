@@ -149,8 +149,8 @@ public class Auto_Blue_Para_Sensor extends LinearOpMode{
         armServo.setPosition(armRetractedPos);
 
         //Run forwards into stone (gets a consistent staring pos)
-        setBothEncoder(400);
-        setBothPower(0.3);
+        //setBothEncoder(400);
+        //setBothPower(0.3);
 
         while (opModeIsActive() && lDrive.isBusy()) {
             idle();
@@ -161,19 +161,19 @@ public class Auto_Blue_Para_Sensor extends LinearOpMode{
 
 
         if (col == 1) { //L
-            setBothEncoder(2150); //Good
+            setBothEncoder(2000); //Good
             Thread.sleep(200);
             setBothPower(.3);
         } else if (col == 0) { //C
-            setBothEncoder(1120); //Good
+            setBothEncoder(950); //Good
             Thread.sleep(200);
             setBothPower(.3);
         } else if (col == -1) { //R
-            setBothEncoder(280); //Good
+            setBothEncoder(150); //Good
             Thread.sleep(200);
             setBothPower(.3);
         } else { //C
-            setBothEncoder(1120);
+            setBothEncoder(950);
             Thread.sleep(200);
             setBothPower(.3);
         }
@@ -274,7 +274,7 @@ public class Auto_Blue_Para_Sensor extends LinearOpMode{
         setBothPower(-.3);
 
         long startTime = System.currentTimeMillis();
-        while (!blueDetected1 && opModeIsActive() && System.currentTimeMillis() - startTime < 5000){
+        while (!blueDetected1 && opModeIsActive() && System.currentTimeMillis() - startTime < 6000){
             blueDetected1 = (cSensor2.blue() - (cSensor2.red() + cSensor2.green()) / 2 > blueThresh);
             //Check tail value
             if(blueDetected1) {
